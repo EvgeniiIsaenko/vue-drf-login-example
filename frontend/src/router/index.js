@@ -1,12 +1,18 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
 import RegView from '@/views/RegView'
+import ProfileView from '@/views/ProfileView'
 
 const routes = [
   {
-    path: '/reg',
-    name: 'reg',
+    path: '/register',
+    name: 'register',
     component: RegView,
   },
+  {
+    path: '/profile',
+    name: 'profile',
+    component: ProfileView,
+  }
 ]
 
 const router = createRouter({

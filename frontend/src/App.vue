@@ -1,7 +1,7 @@
 <template>
   <nav>
-    <router-link v-if="localStorage.get('token')" to="/profile">Профиль</router-link>
-    <router-link v-else to="/login">Войти в аккаунт</router-link>
+    <router-link to="/profile">Профиль</router-link>
+    <router-link to="/register">Войти в аккаунт</router-link>
   </nav>
   <router-view/>
 </template>

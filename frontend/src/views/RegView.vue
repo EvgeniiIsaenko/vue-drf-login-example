@@ -19,7 +19,8 @@
 
 <script>
 import axios from 'axios';
-import { VueCookies } from 'vue-cookies';
+import router from '@/router';
+let baseUrl = 'https://localhost:8000';
 
 export default {
     name: 'RegView',
@@ -32,12 +33,24 @@ export default {
             isSubmitting: false,
         }
     },
-    created() { // TODO: see whether this would be the best option for checking whether the user is already logged in
-        if (localStorage.get('token')) {
-            this.$router.push('/profile');
-        }
+    async created() { // check whether user is already logged in and has the right token
+        let payload = {
+            token: this.$cookies.get('token'),
+        };
+        axios.get(`${baseUrl}/api/token/`, payload)
+        .then(response => {
+            if (this.$cookies.get('token') == response.data.token) {
+                router.push('/profile');
+            }
+        }).catch(e => {
+            if (e.response) {
+                alert('Не получилось вернуть токен')
+            }
+
+            return e;
+        });
     },
-    mehods: {
+    methods: {
         submitRegForm() {
             this.isSubmitting = true;
             let payload = {
@@ -46,16 +59,31 @@ export default {
                 pass: this.pass,
                 passConfirmation: this.passConfirmation,
             };
-            axios.post('/api/register', payload) // TODO: make it connect to base url
-            .then(response => { 
-                localStorage.set('token', response.data.token);
-                this.$router.push('/profile');
+            axios.post(`${baseUrl}/api/register/`, payload)
+            .then(() => {
+                let payload = {
+                    name: this.name,
+                    pass: this.pass,
+                }
+                axios.get(`${baseUrl}/api/token/`, payload) // recieve the token itself
+                .then(response => {
+                    this.$cookies.set('token', response.data.token);
+                    this.$router.push('/profile');
+                }).catch(e => {
+                    this.isSubmitting = false;
+                    if (e.response) {
+                        alert('Не получилось вернуть токен');
+                    }
+
+                    return e;
+                })
             })
             .catch(e => {
                 this.isSubmitting = false;
-                if (e.response.data.errors != undefined) {
-                    alert('Неправильные значения!'); // TODO: make it display the problem for the client (wrong pass / wrong name / wrong email)
+                if (e.response) {
+                    alert('Неправильные значения!');
                 }
+
                 return e;
             });
         }
