@@ -2,16 +2,14 @@
     <div style="display: flex; flex-direction: column; align-items: center; font-size: 20px;">
         <div id="auth">
             <div>
-                Регистрация
+                Вход
             </div>
             <form id="auth-inputs">
                 <label>Никнейм</label>
                 <input v-model="username" type="name"/>
-                <label>Почта</label>
-                <input v-model="email" type="email"/> 
-                <label>Пароль</label> <!-- TODO: add validation errors for names, emails, passwords -->
+                <label>Пароль</label>
                 <input v-model="password" type="password"/>
-                <button :disabled="isSubmitting" @click="submitRegForm" type="submit">Зарегистрироваться</button>           
+                <button :disabled="isSubmitting" @click="submitLoginForm" type="submit">Войти</button>           
             </form>
         </div>
     </div>
@@ -32,31 +30,16 @@ export default {
         }
     },
     methods: {
-        async submitRegForm() {
+        async submitLoginForm() {
             this.isSubmitting = true;
             let payload = {
                 username: this.username,
-                email: this.email,
                 password: this.password,
             };
-            await axios.post(`${baseUrl}/api/register/`, payload)
-            .then(() => {
-                let payload = {
-                    username: this.username,
-                    password: this.password,
-                }
-                axios.post(`${baseUrl}/api/token/`, payload) // recieve the token itself
-                .then(response => {
-                    this.$cookies.set('token', response.data);
-                    this.$router.push('/profile');
-                }).catch(e => {
-                    this.isSubmitting = false;
-                    if (e.response) {
-                        alert('Не получилось вернуть токен');
-                    }
-
-                    return e;
-                })
+            await axios.post(`${baseUrl}/api/token/`, payload)
+            .then(response => {
+                this.$cookies.set('token', response.data);
+                this.$router.push('/profile');
             })
             .catch(e => {
                 this.isSubmitting = false;

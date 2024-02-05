@@ -15,12 +15,10 @@ def register(request):
     
     if serializer.is_valid():
         user = serializer.save()
-        
-        token = create_token(user)
 
         response = Response()
         response.data = ({
-            'token': token.key,
+            'message': 'success'
         })
         return response
     

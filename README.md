@@ -30,5 +30,4 @@ npm run serve
 Django REST Framework
 Vue.js
 PostgreSQL
-Docker
 ```
