@@ -3,7 +3,7 @@
     <router-link v-if="this.$cookies.get('token')" to="/profile">Профиль</router-link>
     <div v-else>
       <router-link to="/register">Зарегистрироваться</router-link>
-      <router-link to="/login">Войти</router-link>
+      <router-link to="/login" style="margin-left: 15px;">Войти</router-link>
     </div>
   </nav>
   <router-view/>
@@ -28,7 +28,6 @@ nav {
 nav a {
   font-weight: bold;
   color: #2c3e50;
-  margin-right: 15px;
 }
 
 nav a.router-link-exact-active {
