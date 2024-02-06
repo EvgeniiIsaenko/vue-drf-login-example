@@ -48,10 +48,11 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [     'corsheaders.middleware.CorsMiddleware', 
     'django.middleware.security.SecurityMiddleware',     'django.contrib.sessions.middleware.SessionMiddleware', 
-    'django.middleware.common.CommonMiddleware',     'django.middleware.csrf.CsrfViewMiddleware', 
+    'django.middleware.common.CommonMiddleware', 
     'django.contrib.auth.middleware.AuthenticationMiddleware',     'django.contrib.messages.middleware.MessageMiddleware', 
     'django.middleware.clickjacking.XFrameOptionsMiddleware', ]
 
+CSRF_TRUSTED_ORIGINS = ['http://localhost:8080']
 
 CORS_ORIGIN_ALLOW_ALL = True   
 
@@ -85,7 +86,7 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'hotelDB', 
-        'USER': 'postgres', 
+        'USER': 'manager', 
         'PASSWORD': 'root', # TODO: change to secure password
         'HOST': '127.0.0.1', 
         'PORT': '5432',

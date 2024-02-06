@@ -10,6 +10,19 @@
 </template>
 
 <script>
+import axios from 'axios';
+
+export default {
+  data() {},
+  mounted: () => {
+    axios.get('http://localhost:8000/api/get_csrf/')
+    .then(response => {
+      this.$cookies.set('csrf_token', response.data.token);
+    }).catch(e => {
+      return e;
+    })
+  }
+}
 </script>
 
 <style>
