@@ -21,5 +21,6 @@ class UserSerializer(serializers.ModelSerializer):
         return instance
     
     def update(self, instance, validated_data):
+        instance.textArea = validated_data.get('textArea')
         instance.save()
         return instance

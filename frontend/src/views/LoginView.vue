@@ -39,6 +39,7 @@ export default {
             await axios.post(`${baseUrl}/api/token/`, payload)
             .then(response => {
                 this.$cookies.set('token', response.data);
+                this.$cookies.set('username', this.username);
                 this.$router.push('/profile');
             })
             .catch(e => {

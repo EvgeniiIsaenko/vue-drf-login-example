@@ -1,10 +1,18 @@
 <template>
     <div>Вы успешно зашли на свою страницу!</div>
     <button @click="logout">Выйти</button>
+    <div style="display: flex; flex-direction: column; align-items: center; margin-top: 50px;">
+        <form style="display: flex; flex-direction: column; width: fit-content;">
+            <label>Ваше описание в базе:</label>
+            <input v-model="textArea" />
+            <button @click="sendText">Отправить</button>
+        </form>
+    </div>
 </template>
 
 <script>
 import router from '@/router';
+import axios from 'axios';
 
 export default {
     name: 'ProfileView',
@@ -27,7 +35,33 @@ export default {
     methods: {
         logout() {
             this.$cookies.remove('token');
+            this.$cookies.remove('username');
             router.push('/login');
+        },
+        sendText() {
+            let payload = {
+                token: this.$cookies.get('token').access,
+            }
+            axios.post('http://localhost:8000/api/token/verify/', payload)
+            .then(response => {
+                if (response.status == 200) {
+                let payload = {
+                    textArea: this.textArea,
+                }
+                axios.post('http://localhost:8000/api/sendText/', payload, {
+                    headers: {
+                    Authorization: 'Bearer ' + this.$cookies.get('token').access
+                } 
+                })
+                .then(() => {
+                    alert('Описание обновлено');
+                }).catch(e => {
+                    return e;
+                })
+            }}).catch(e => {
+                return e;
+            })
+            
         }
     }
 }
